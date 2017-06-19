@@ -1,0 +1,22 @@
+{
+  "name": "gitlab-issue-bot",
+  "version": "0.0.1",
+  "description": "A Slack bot that connects to GitLab Issues",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": "https://github.com/Filiosoft/gitlab-issue-bot",
+  "author": "Filiosoft Team <Team@Filiosoft.com>",
+  "license": "MIT",
+  "dependencies": {
+    "botkit": "^0.5.4",
+    "moment": "^2.18.1",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
