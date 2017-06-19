@@ -1,36 +1,15 @@
 const Botkit = require('botkit');
 const controller = Botkit.slackbot();
-const request = require('request-promise');
 const moment = require('moment');
+const getIssue = require('./lib/getIssue');
 
+// config
 const config = require('./config.json');
 const pkg = require('./package.json');
 const bot = controller.spawn({
     token: config.slackKey || process.env.SLACK_KEY,
     retry: 30
 });
-
-function getIssue(namespace, iid) {
-    return new Promise(function (fulfill, reject) {
-        const url = `${config.gitlabBaseUrl}/api/v4/projects/${namespace}/issues/${iid}`;
-        const options = {
-            uri: url,
-            headers: {
-                'User-Agent': 'Request-Promise',
-                'PRIVATE-TOKEN': config.gitlabKey
-            },
-            json: true
-        };
-        request(options)
-            .then(function (res) {
-                fulfill(res);
-            })
-            .catch(function (err) {
-                console.log(err.statusCode);
-                reject(err);
-            });
-    });
-}
 
 bot.startRTM(function (err, bot, payload) {
     if (err) {
