@@ -1,30 +1,61 @@
 const Botkit = require('botkit');
-const controller = Botkit.slackbot();
 const moment = require('moment');
-const getIssue = require('./lib/getIssue');
+const gitlabApi = require('./lib/gitlabApi');
 
 // config
 const config = require('./config.json');
 const pkg = require('./package.json');
-const bot = controller.spawn({
-    token: config.slackKey || process.env.SLACK_KEY,
+const controller = Botkit.slackbot({
     retry: 30
+})
+const bot = controller.spawn({
+    token: config.slackKey || process.env.SLACK_KEY
 });
+
+function matcher(seperator, message) {
+    return new Promise(function (fulfill, reject) {
+        let msg = message.text.split(' ');
+        let itemsProcessed = 0;
+        let issues = [];
+        for (let i = 0; i < msg.length; i++) {
+            let text = msg[i];
+            if (text.indexOf('/') > -1 && text.indexOf(seperator) > -1) {
+                let parts = text.split(seperator);
+                let issue = {
+                    parts: parts,
+                    namespace: parts[0],
+                    iid: parts[1]
+                }
+                issues.push(issue);
+            }
+            itemsProcessed++;
+            if (itemsProcessed === msg.length) {
+                return fulfill(issues);
+            }
+        }
+    });
+}
 
 bot.startRTM(function (err, bot, payload) {
     if (err) {
         console.error(err);
         throw new Error('Could not connect to Slack');
     }
-    controller.hears(/.*/, ['ambient'], function (bot, message) {
+
+    controller.hears('version', ['direct_message,direct_mention,mention'], function (bot, message) {
+        bot.reply(message, `${pkg.name} v${pkg.version}`);
+    });
+
+    // ambient issues
+    controller.hears(/.*\/.*#.*/, ['ambient'], function (bot, message) {
         var msg = message.text.split(' ');
-        for (var i = 0; i < msg.length; i++) {
-            var text = msg[i];
-            if (text.indexOf('/') > -1 && text.indexOf('#') > -1) {
-                let parts = text.split('#');
-                let namespace = encodeURIComponent(parts[0]);
-                let iid = parts[1];
-                getIssue(namespace, iid).then((res) => {
+        matcher('#', message).then((res) => {
+            for (var i = 0; i < res.length; i++) {
+                var text = res[i];
+                let parts = text.parts;
+                let namespace = encodeURIComponent(text.namespace);
+                let iid = text.iid;
+                gitlabApi(`/projects/${namespace}/issues/${iid}`).then((res) => {
                     let time = moment(res.created_at).format('MMMM Do YYYY, h:mm:ss a');
                     let issueMsg = `
 ><${config.gitlabBaseUrl}/${parts[0]}/issues/${iid}|${parts[0]}#${parts[1]}>: \`${res.state}\` ${res.title}
@@ -34,24 +65,21 @@ bot.startRTM(function (err, bot, payload) {
                 }).catch((err) => {
                     console.log(err);
                 });
+
             }
-        }
+        });
     });
 
-
-    controller.hears('version', ['direct_message,direct_mention,mention'], function (bot, message) {
-        bot.reply(message, `${pkg.name} v${pkg.version}`);
-    });
-
-    controller.hears(/.*/, ['direct_message,direct_mention,mention'], function (bot, message) {
+    // direct issues
+    controller.hears(/.*\/.*#.*/, ['direct_message,direct_mention,mention'], function (bot, message) {
         var msg = message.text.split(' ');
-        for (var i = 0; i < msg.length; i++) {
-            var text = msg[i];
-            if (text.indexOf('/') > -1 && text.indexOf('#') > -1) {
-                let parts = text.split('#');
-                let namespace = encodeURIComponent(parts[0]);
-                let iid = parts[1];
-                getIssue(namespace, iid).then((res) => {
+        matcher('#', message).then((res) => {
+            for (var i = 0; i < res.length; i++) {
+                var text = res[i];
+                let parts = text.parts;
+                let namespace = encodeURIComponent(text.namespace);
+                let iid = text.iid;
+                gitlabApi(`/projects/${namespace}/issues/${iid}`).then((res) => {
                     let time = moment(res.created_at).format('MMMM Do YYYY, h:mm:ss a');
                     let lastUpdated = moment(res.updated_at).format('MMMM Do YYYY, h:mm:ss a');
                     let description = res.description.replace(/(\r\n|\n|\r)/gm, function (x) {
@@ -99,6 +127,107 @@ bot.startRTM(function (err, bot, payload) {
                     }
                 });
             }
-        }
+        });
+    });
+
+    // direct milestones
+    controller.hears(/.*\/.*%.*/, ['direct_message,direct_mention,mention'], function (bot, message) {
+        var msg = message.text.split(' ');
+        matcher('%', message).then((res) => {
+            for (var i = 0; i < res.length; i++) {
+                var text = res[i];
+                let parts = text.parts;
+                let namespace = encodeURIComponent(text.namespace);
+                let iid = text.iid;
+                gitlabApi(`/projects/${namespace}/milestones?iids=${iid}`).then((response) => {
+                    console.log(response)
+                    if (response.message || response.length === 0) {
+                        bot.reply(message, 'Milestone could not be found.');
+                    } else {
+                        let res = response[0]
+                        let time = moment(res.created_at).format('MMMM Do YYYY, h:mm:ss a');
+                        let lastUpdated = moment(res.updated_at).format('MMMM Do YYYY, h:mm:ss a');
+                        let description = res.description.replace(/(\r\n|\n|\r)/gm, function (x) {
+                            return `${x}>`
+                        });
+                        let due;
+                        let start;
+                        if (res.due_date == null) {
+                            due = 'No due date';
+                        } else {
+                            due = res.due_date;
+                        }
+                        if (res.start_date == null) {
+                            start = 'No start date';
+                        } else {
+                            start = res.start_date;
+                        }
+                        let issueMsg = `
+<${config.gitlabBaseUrl}/${parts[0]}/milestones/${iid}|${parts[0]}%${parts[1]}> \`${res.state}\` ${res.title}
+>*Description*
+>${description}
+>*Last Updated*
+>${lastUpdated}
+>*Start Date*
+>${start}
+>*Due Date*
+>${due}
+                    `
+                        bot.reply(message, issueMsg);
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                    if (err.statusCode === 404) {
+                        bot.reply(message, 'Milestone not found.');
+                    } else if (err.statusCode === 500) {
+                        bot.reply(message, 'An error occurred.. :(');
+                    } else {
+                        bot.reply(message, err.message);
+                    }
+                });
+            }
+        });
+    });
+
+    // ambient milestones
+    controller.hears(/.*\/.*%.*/, ['ambient'], function (bot, message) {
+        var msg = message.text.split(' ');
+        matcher('%', message).then((res) => {
+            for (var i = 0; i < res.length; i++) {
+                var text = res[i];
+                let parts = text.parts;
+                let namespace = encodeURIComponent(text.namespace);
+                let iid = text.iid;
+                gitlabApi(`/projects/${namespace}/milestones?iids=${iid}`).then((response) => {
+                    console.log(response)
+                    if (response.message || response.length === 0) {
+                        bot.reply(message, 'Milestone could not be found.');
+                    } else {
+                        let res = response[0]
+                        let time = moment(res.created_at).format('MMMM Do YYYY, h:mm:ss a');
+                        let due;
+                        if (res.due_date == null) {
+                            due = 'No due date';
+                        } else {
+                            due = `Due ${res.due_date}`;
+                        }
+                        let issueMsg = `
+><${config.gitlabBaseUrl}/${parts[0]}/milestones/${iid}|${parts[0]}%${parts[1]}>: \`${res.state}\` ${res.title}
+>${due} | Created ${time}
+                    `
+                        bot.reply(message, issueMsg);
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                    if (err.statusCode === 404) {
+                        bot.reply(message, 'Milestone not found.');
+                    } else if (err.statusCode === 500) {
+                        bot.reply(message, 'An error occurred.. :(');
+                    } else {
+                        bot.reply(message, err.message);
+                    }
+                });
+            }
+        });
     });
 });
