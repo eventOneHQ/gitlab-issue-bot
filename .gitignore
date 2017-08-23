@@ -53,3 +53,4 @@ obj/
 bin/
 config.json
 docker-compose.yml
+.env

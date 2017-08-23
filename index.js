@@ -1,15 +1,16 @@
 const Botkit = require('botkit');
 const moment = require('moment');
 const gitlabApi = require('./lib/gitlabApi');
+require('dotenv').config()
+const env = process.env;
 
 // config
-const config = require('./config.json');
 const pkg = require('./package.json');
 const controller = Botkit.slackbot({
     retry: 30
 })
 const bot = controller.spawn({
-    token: config.slackKey || process.env.SLACK_KEY
+    token: env.SLACK_KEY
 });
 
 function matcher(seperator, message) {
@@ -58,7 +59,7 @@ bot.startRTM(function (err, bot, payload) {
                 gitlabApi(`/projects/${namespace}/issues/${iid}`).then((res) => {
                     let time = moment(res.created_at).format('MMMM Do YYYY, h:mm:ss a');
                     let issueMsg = `
-><${config.gitlabBaseUrl}/${parts[0]}/issues/${iid}|${parts[0]}#${parts[1]}>: \`${res.state}\` ${res.title}
+><${env.GITLAB_URL}/${parts[0]}/issues/${iid}|${parts[0]}#${parts[1]}>: \`${res.state}\` ${res.title}
 >${res.assignee.name} | ${time}
                     `
                     bot.reply(message, issueMsg);
@@ -99,7 +100,7 @@ bot.startRTM(function (err, bot, payload) {
                     }
 
                     let issueMsg = `
-<${config.gitlabBaseUrl}/${parts[0]}/issues/${iid}|${parts[0]}#${parts[1]}> \`${res.state}\` ${res.title}
+<${env.GITLAB_URL}/${parts[0]}/issues/${iid}|${parts[0]}#${parts[1]}> \`${res.state}\` ${res.title}
 >*Description*
 >${description}
 > *Assignee*
@@ -163,7 +164,7 @@ bot.startRTM(function (err, bot, payload) {
                             start = res.start_date;
                         }
                         let issueMsg = `
-<${config.gitlabBaseUrl}/${parts[0]}/milestones/${iid}|${parts[0]}%${parts[1]}> \`${res.state}\` ${res.title}
+<${env.GITLAB_URL}/${parts[0]}/milestones/${iid}|${parts[0]}%${parts[1]}> \`${res.state}\` ${res.title}
 >*Description*
 >${description}
 >*Last Updated*
@@ -212,7 +213,7 @@ bot.startRTM(function (err, bot, payload) {
                             due = `Due ${res.due_date}`;
                         }
                         let issueMsg = `
-><${config.gitlabBaseUrl}/${parts[0]}/milestones/${iid}|${parts[0]}%${parts[1]}>: \`${res.state}\` ${res.title}
+><${env.GITLAB_URL}/${parts[0]}/milestones/${iid}|${parts[0]}%${parts[1]}>: \`${res.state}\` ${res.title}
 >${due} | Created ${time}
                     `
                         bot.reply(message, issueMsg);

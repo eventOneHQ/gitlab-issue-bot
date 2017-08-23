@@ -2,18 +2,38 @@
 
 A Slack bot that connects to GitLab Issues
 
-## Configuration
-Add the following to the `config.json` file. 
-```javascript
-{
-    "slackKey": "xxx-xxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxx", // Your Slack API key
-    "gitlabKey": "xxxxxxxxxxxxxxxxxxxx", // Your GitLab private token
-    "gitlabBaseUrl": "https://gitlab.com" // The base URL of your instance - no trailing slashes
-}
+## Getting Started
+### Configuration
+Add the following to a `.env` file (or `docker-compose.yml` if you are using Docker). 
+```
+SLACK_KEY=xxx-xxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxx # Your Slack API key
+GITLAB_KEY=xxxxxxxxxxxxxxxxxxxx # Your GitLab private token
+GITLAB_URL=https://gitlab.com # The base URL of your instance - no trailing slashes
 ```
 
-## Run
+### Run
+To start the bot, first install the dependencies:
+```bash
+$ yarn install
+```
+
+Then start the bot:
+```bash
+$ yarn start
+```
+
+### Run with Docker
+
+To run with `docker-compose`, first copy the config:
 
 ```bash
-$ npm start
+$ cp docker-compose.exmaple.yml docker-compose.yml
+```
+
+Then open the `docker-compose.yml` and set the environment variables as describled above.
+
+Finally, run the bot:
+
+```bash
+$ docker-compose up -d
 ```
