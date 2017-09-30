@@ -58,9 +58,15 @@ bot.startRTM(function (err, bot, payload) {
                 let iid = text.iid;
                 gitlabApi(`/projects/${namespace}/issues/${iid}`).then((res) => {
                     let time = moment(res.created_at).format('MMMM Do YYYY, h:mm:ss a');
+                    let assignee;
+                    if (res.assignee) {
+                        assignee = res.assignee.name;
+                    } else {
+                        assignee = 'No assignee'
+                    }
                     let issueMsg = `
 ><${env.GITLAB_URL}/${parts[0]}/issues/${iid}|${parts[0]}#${parts[1]}>: \`${res.state}\` ${res.title}
->${res.assignee.name} | ${time}
+>${assignee} | ${time}
                     `
                     bot.reply(message, issueMsg);
                 }).catch((err) => {
@@ -88,6 +94,7 @@ bot.startRTM(function (err, bot, payload) {
                     });
                     let due;
                     let milestone
+                    let assignee
                     if (res.due_date == null) {
                         due = 'No due date';
                     } else {
@@ -98,13 +105,18 @@ bot.startRTM(function (err, bot, payload) {
                     } else {
                         milestone = 'No milestone'
                     }
+                    if (res.assignee) {
+                        assignee = res.assignee.name;
+                    } else {
+                        assignee = 'No assignee'
+                    }
 
                     let issueMsg = `
 <${env.GITLAB_URL}/${parts[0]}/issues/${iid}|${parts[0]}#${parts[1]}> \`${res.state}\` ${res.title}
 >*Description*
 >${description}
 > *Assignee*
-> ${res.assignee.name}
+> ${assignee}
 >*Last Updated*
 >${lastUpdated}
 >*Due*
