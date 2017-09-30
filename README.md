@@ -2,6 +2,9 @@
 
 A Slack bot that connects to GitLab Issues
 
+GitLab Issue Bot will notice references to GitLab Issues, automatically get the latest issue info from GitLab and respond with it!
+
+
 ## Getting Started
 ### Configuration
 Add the following to a `.env` file (or `docker-compose.yml` if you are using Docker). 
