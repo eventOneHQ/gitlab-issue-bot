@@ -7,8 +7,9 @@
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
-  "repository": "https://github.com/Filiosoft/gitlab-issue-bot",
-  "author": "Filiosoft Team <Team@Filiosoft.com>",
+  "homepage": "https://filiosoft.org/gitlab-issue-bot",
+  "repository": "Filiosoft/gitlab-issue-bot",
+  "author": "Filiosoft Open Source <opensource@filiosoft.com>",
   "license": "MIT",
   "dependencies": {
     "botkit": "^0.5.4",
