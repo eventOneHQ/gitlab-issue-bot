@@ -12,11 +12,11 @@
   "author": "Filiosoft Open Source <opensource@filiosoft.com>",
   "license": "MIT",
   "dependencies": {
-    "botkit": "^0.5.4",
-    "dotenv": "^4.0.0",
-    "moment": "^2.18.1",
-    "request": "^2.81.0",
-    "request-promise": "^4.2.1"
+    "botkit": "^0.6.14",
+    "dotenv": "^5.0.1",
+    "moment": "^2.22.1",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
