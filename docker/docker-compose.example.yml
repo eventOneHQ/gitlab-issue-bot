@@ -1,9 +1,0 @@
-version: '2.1'
-services:
-  bot:
-    restart: always
-    image: filiosoft/gitlab-issue-bot:latest
-    environment:
-     SLACK_KEY: "<YOUR_SLACK_KEY>"
-     GITLAB_KEY: "<YOUR_GITLAB_TOKEN>"
-     GITLAB_URL: "https://gitlab.com"

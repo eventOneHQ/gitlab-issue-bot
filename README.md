@@ -1,5 +1,8 @@
 # GitLab Issue Bot for Slack
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/filiosoft/gitlab-issue-bot.svg)](https://hub.docker.com/r/filiosoft/gitlab-issue-bot/)
+[![Docker Build Status](https://img.shields.io/docker/build/filiosoft/gitlab-issue-bot.svg)](https://hub.docker.com/r/filiosoft/gitlab-issue-bot)
+
 A Slack bot that connects to GitLab Issues
 
 GitLab Issue Bot will notice references to GitLab Issues, automatically get the latest issue info from GitLab and respond with it!
@@ -21,13 +24,13 @@ GITLAB_URL=https://gitlab.com # The base URL of your instance - no trailing slas
 To start the bot, first install the dependencies:
 
 ```bash
-$ yarn install
+$ npm install
 ```
 
 Then start the bot:
 
 ```bash
-$ yarn start
+$ npm start
 ```
 
 ### Run with Docker
@@ -57,5 +60,5 @@ kubectl create secret generic gitlab-issue-bot --from-literal=slackToken=<your_s
 Then, run the following to deploy!
 
 ```bash
-kubectl apply -f k8s
+kubectl apply -f https://raw.githubusercontent.com/Filiosoft/gitlab-issue-bot/master/k8s/deployment.yaml
 ```
