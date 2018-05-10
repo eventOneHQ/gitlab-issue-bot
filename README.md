@@ -2,6 +2,7 @@
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/filiosoft/gitlab-issue-bot.svg)](https://hub.docker.com/r/filiosoft/gitlab-issue-bot/)
 [![Docker Build Status](https://img.shields.io/docker/build/filiosoft/gitlab-issue-bot.svg)](https://hub.docker.com/r/filiosoft/gitlab-issue-bot)
+[![MicroBadger Size](https://img.shields.io/microbadger/image-size/filiosoft/gitlab-issue-bot.svg)](https://hub.docker.com/r/filiosoft/gitlab-issue-bot)
 
 A Slack bot that connects to GitLab Issues
 
