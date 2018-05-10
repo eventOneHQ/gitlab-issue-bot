@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gitlab-issue-bot
+  labels:
+    component: gitlab-issue-bot
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: gitlab-issue-bot
+    spec:
+      containers:
+      - name: gitlab-issue-bot
+        image: filiosoft/gitlab-issue-bot:dev
+        imagePullPolicy: Always
+        env:
+        # Create a secret with your slack bot token and reference it here
+        - name: SLACK_KEY
+          valueFrom:
+            secretKeyRef:
+              name: gitlab-issue-bot
+              key: slackToken
+        # Create a secret with your gitlab access token and reference it here
+        - name: GITLAB_KEY
+          valueFrom:
+            secretKeyRef:
+              name: gitlab-issue-bot
+              key: gitlabKey
+        - name: GITLAB_URL
+          value: "https://gitlab.com"
