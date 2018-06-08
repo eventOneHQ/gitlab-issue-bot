@@ -1,5 +1,6 @@
 const cookieSession = require('cookie-session')
 const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
 
 module.exports = (app, config) => {
   app.engine(
@@ -11,6 +12,8 @@ module.exports = (app, config) => {
   )
   app.set('view engine', '.hbs')
 
+  // You must use a body parser for JSON before mounting the adapter
+  app.use(bodyParser.json())
   // cookieSession config
   app.use(
     cookieSession({

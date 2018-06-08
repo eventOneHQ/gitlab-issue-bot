@@ -14,6 +14,9 @@ require('./config/mongo')(config)
 // configure passport
 require('./config/passport')(app, config)
 
+// configure slack
+require('./config/slack')(app, config)
+
 // configure routes
 require('./routes')(app, config)
 

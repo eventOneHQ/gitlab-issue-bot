@@ -12,6 +12,8 @@
   "author": "Filiosoft Open Source <opensource@filiosoft.com>",
   "license": "MIT",
   "dependencies": {
+    "@slack/events-api": "^1.0.1",
+    "body-parser": "^1.18.3",
     "botkit": "^0.6.14",
     "cookie-session": "^2.0.0-beta.3",
     "dotenv": "^5.0.1",
