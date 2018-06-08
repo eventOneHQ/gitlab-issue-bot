@@ -8,6 +8,9 @@ const app = express()
 // configure express
 require('./config/express')(app, config)
 
+// configure mongodb
+require('./config/mongo')(config)
+
 // configure passport
 require('./config/passport')(app, config)
 
