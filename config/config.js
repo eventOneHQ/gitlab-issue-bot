@@ -1,8 +1,7 @@
 require('dotenv').config()
 
-const config = {
+module.exports = {
   port: process.env.PORT || 3000,
-  cookieKey: process.env.COOKIE_KEY,
   baseUrl: process.env.BASE_URL || 'http://localhost:3000',
   dbUri: process.env.MONGODB_URI || 'mongodb://localhost:27017/glib',
   slack: {
@@ -12,5 +11,3 @@ const config = {
     clientSecret: process.env.SLACK_CLIENT_SECRET
   }
 }
-
-module.exports = config

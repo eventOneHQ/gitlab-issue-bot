@@ -1,8 +1,9 @@
-const cookieSession = require('cookie-session')
+const express = require('express')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 
-module.exports = (app, config) => {
+module.exports = (controller, config) => {
+  const app = express()
   app.engine(
     '.hbs',
     exphbs({
@@ -17,11 +18,11 @@ module.exports = (app, config) => {
 
   app.use(bodyParser.urlencoded({ extended: true }))
 
-  // cookieSession config
-  app.use(
-    cookieSession({
-      maxAge: 24 * 60 * 60 * 1000, // One day in milliseconds
-      keys: [config.cookieKey]
-    })
+  controller.webserver = app
+
+  app.listen(config.port, () =>
+    console.log(`App listening on port ${config.port}!`)
   )
+
+  return app
 }

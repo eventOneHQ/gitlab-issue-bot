@@ -1,24 +1,28 @@
-const express = require('express')
+const Botkit = require('botkit')
 
 const config = require('./config')
 
-const app = express()
+const mongodbStorage = require('botkit-storage-mongo')({
+  mongoUri: config.dbUri
+})
+
+const controller = Botkit.slackbot({
+  storage: mongodbStorage,
+  retry: 30,
+  port: config.port,
+  clientId: config.slack.clientId,
+  clientSecret: config.slack.clientSecret,
+  scopes: ['bot']
+})
+
+controller.startTicking()
 
 // configure express
-require('./config/express')(app, config)
+const app = require('./config/express')(controller, config)
 
-// configure mongodb
-require('./config/mongo')(config)
+require('./routes')(app, controller)
 
-// configure passport
-require('./config/passport')(app, config)
+// configure rtm sockets
+require('./config/rtm')(controller)
 
-// configure slack
-require('./config/slack')(app, config)
-
-// configure routes
-require('./routes')(app, config)
-
-app.listen(config.port, () =>
-  console.log(`App listening on port ${config.port}!`)
-)
+require('./config/user_registration.js')(controller)
