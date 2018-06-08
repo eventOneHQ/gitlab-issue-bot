@@ -4,8 +4,8 @@
   "description": "A Slack bot that connects to GitLab Issues",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server/app.js",
-    "start": "node server/app.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "homepage": "https://filiosoft.org/gitlab-issue-bot",
   "repository": "Filiosoft/gitlab-issue-bot",
