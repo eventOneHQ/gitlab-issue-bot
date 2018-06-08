@@ -14,6 +14,9 @@ module.exports = (app, config) => {
 
   // You must use a body parser for JSON before mounting the adapter
   app.use(bodyParser.json())
+
+  app.use(bodyParser.urlencoded({ extended: true }))
+
   // cookieSession config
   app.use(
     cookieSession({

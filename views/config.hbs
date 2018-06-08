@@ -1,0 +1,18 @@
+<h1>Gliby: Config</h1>
+
+<form action="/config" method="post">
+    <div class="form-group">
+        <label for="glInstance">GitLab Instance Address</label>
+        {{#if user.gitlabInstanceAddress}}
+        <input type="text" class="form-control" id="glInstance" name="gitlabInstanceAddress" placeholder="GitLab Instance Address" value="{{user.gitlabInstanceAddress}}"
+            required> {{else}}
+        <input type="text" class="form-control" id="glInstance" name="gitlabInstanceAddress" placeholder="GitLab Instance Address" value="https://gitlab.com"
+            required> {{/if}}
+    </div>
+    <div class="form-group">
+        <label for="pat">Personal Access Token</label>
+        <input type="password" class="form-control" id="pat" name="gitlabAccessToken" placeholder="Personal Access Token" value="{{user.gitlabAccessToken}}"
+            required>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

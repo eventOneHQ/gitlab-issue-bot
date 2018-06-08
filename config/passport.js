@@ -1,5 +1,5 @@
 const passport = require('passport')
-const GitLabStrategy = require('passport-gitlab2')
+const SlackStrategy = require('passport-slack-oauth2').Strategy
 const mongoose = require('mongoose')
 
 const User = mongoose.model('User')
@@ -8,22 +8,22 @@ module.exports = (app, config) => {
   app.use(passport.session()) // Used to persist login sessions
 
   passport.use(
-    new GitLabStrategy(
+    new SlackStrategy(
       {
-        clientID: config.gitlabAppId,
-        clientSecret: config.gitlabAppSecret,
-        callbackURL: `${config.baseUrl}/auth/gitlab/callback`
+        clientID: config.slack.clientId,
+        clientSecret: config.slack.clientSecret,
+        callbackURL: `${config.baseUrl}/auth/slack/callback`
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
           let user
 
           // find the user
-          user = await User.findOne({ gitlabId: profile.id }).exec()
+          user = await User.findOne({ slackId: profile.id }).exec()
 
           // if it doesn't exist, create it
           if (!user) {
-            user = new User({ gitlabId: profile.id })
+            user = new User({ slackId: profile.id })
             await user.save()
           }
 

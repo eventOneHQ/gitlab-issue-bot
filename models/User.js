@@ -3,9 +3,14 @@ const Schema = mongoose.Schema
 
 module.exports = config => {
   const userSchema = new Schema({
-    gitlabId: {
+    gitlabInstanceAddress: {
       type: String,
-      required: true,
+      default: 'https://gitlab.com'
+    },
+    gitlabAccessToken: String,
+    slackId: {
+      type: String,
+      required: false,
       unique: true
     },
     created_at: {

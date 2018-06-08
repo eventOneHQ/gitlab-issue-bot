@@ -10,12 +10,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
         crossorigin="anonymous">
 
-    <title>GLIB</title>
+    <title>Gliby</title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">GLIB</a>
+        <a class="navbar-brand" href="#">Gliby</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -33,15 +33,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                {{/if}} {{#if isSecret}}
+                {{/if}} {{#if isConfig}}
                 <li class="nav-item active">
-                    <a class="nav-link" href="/secret">Secret
+                    <a class="nav-link" href="/config">Config
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
                 {{else}}
                 <li class="nav-item">
-                    <a class="nav-link" href="/secret">Secret</a>
+                    <a class="nav-link" href="/config">Config</a>
                 </li>
                 {{/if}}
             </ul>

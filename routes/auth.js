@@ -3,22 +3,14 @@ const passport = require('passport')
 const router = express.Router()
 
 module.exports = config => {
-  router.get(
-    '/gitlab',
-    passport.authenticate('gitlab', {
-      scope: ['api']
-    })
-  )
+  // path to start the OAuth flow
+  router.get('/slack', passport.authorize('Slack'))
 
+  // OAuth callback url
   router.get(
-    '/gitlab/callback',
-    passport.authenticate('gitlab', {
-      failureRedirect: '/auth/login'
-    }),
-    (req, res) => {
-      // Successful authentication, redirect home.
-      res.redirect('/secret')
-    }
+    '/slack/callback',
+    passport.authenticate('Slack', { failureRedirect: '/auth/login' }),
+    (req, res) => res.redirect('/config')
   )
 
   // Logout route
@@ -29,7 +21,7 @@ module.exports = config => {
 
   // Login redirect route
   router.get('/login', (req, res) => {
-    res.redirect('/auth/gitlab')
+    res.redirect('/auth/slack')
   })
 
   return router

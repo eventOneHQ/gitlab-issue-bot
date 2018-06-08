@@ -23,7 +23,7 @@
     "moment": "^2.22.1",
     "mongoose": "^5.1.4",
     "passport": "^0.4.0",
-    "passport-gitlab2": "github:fh1ch/passport-gitlab2",
+    "passport-slack-oauth2": "^1.0.2",
     "request": "^2.85.0",
     "request-promise": "^4.2.2"
   },
