@@ -12,13 +12,13 @@ module.exports = (app, config) => {
   // Attach listeners to events by Slack Event "type". See: https://api.slack.com/events/message.im
   slackEvents.on('message', event => {
     console.log(event)
-    web.chat
-      .postMessage({ channel: event.channel, text: 'Hello there' })
-      .then(res => {
-        // `res` contains information about the posted message
-        console.log('Message sent: ', res.ts)
-      })
-      .catch(console.error)
+    // web.chat
+    //   .postMessage({ channel: event.channel, text: 'Hello there' })
+    //   .then(res => {
+    //     // `res` contains information about the posted message
+    //     console.log('Message sent: ', res.ts)
+    //   })
+    //   .catch(console.error)
   })
 
   // Handle errors (see `errorCodes` export)
