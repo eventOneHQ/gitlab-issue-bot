@@ -12,7 +12,7 @@ module.exports = (app, config) => {
   // Attach listeners to events by Slack Event "type". See: https://api.slack.com/events/message.im
   slackEvents.on('message', event => {
     // don't respond to other bots (e.g self)
-    if (event.subtype === 'bot_message') {
+    if (event.subtype === 'bot_message' || event.hidden) {
       return
     }
     console.log(event)
