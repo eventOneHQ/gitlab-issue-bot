@@ -61,5 +61,5 @@ kubectl create secret generic gitlab-issue-bot --from-literal=slackToken=<your_s
 Then, run the following to deploy!
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/Filiosoft/gitlab-issue-bot/master/k8s/deployment.yaml
+kubectl apply -f https://raw.githubusercontent.com/eventOneHQ/gitlab-issue-bot/master/k8s/deployment.yaml
 ```
