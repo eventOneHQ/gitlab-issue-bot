@@ -7,35 +7,35 @@
     "dev": "nodemon app.js",
     "start": "node app.js"
   },
-  "homepage": "https://filiosoft.org/gitlab-issue-bot",
-  "repository": "Filiosoft/gitlab-issue-bot",
-  "author": "Filiosoft Open Source <opensource@filiosoft.com>",
+  "homepage": "https://oss.eventone.page/gitlab-issue-bot/",
+  "repository": "eventOneHQ/gitlab-issue-bot",
+  "author": "eventOne Labs <opensource@event1.io>",
   "license": "MIT",
   "dependencies": {
-    "@slack/client": "^4.3.1",
+    "@slack/client": "^4.12.0",
     "@slack/events-api": "^1.0.1",
-    "axios": "^0.18.0",
-    "body-parser": "^1.18.3",
-    "botkit": "^0.6.14",
+    "axios": "^0.18.1",
+    "body-parser": "^1.19.0",
+    "botkit": "^0.6.21",
     "botkit-storage-mongo": "^1.0.7",
     "cookie-session": "^2.0.0-beta.3",
     "dotenv": "^5.0.1",
-    "express": "^4.16.3",
-    "express-handlebars": "^3.0.0",
-    "moment": "^2.22.1",
-    "mongoose": "^5.1.4",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "moment": "^2.24.0",
+    "mongoose": "^5.7.1",
     "passport": "^0.4.0",
     "passport-slack-oauth2": "^1.0.2",
-    "request": "^2.85.0",
-    "request-promise": "^4.2.2"
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.19.2"
   }
 }
